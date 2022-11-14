@@ -114,6 +114,7 @@ def optimize_model():
 
 def play_once(env,training=True,num_episodes=50000):
     performance = []
+    performance_current = []
     for i_episode in range(num_episodes):
         env.reset()
         last_screen = env.get_screen()
@@ -137,10 +138,11 @@ def play_once(env,training=True,num_episodes=50000):
                 episode_durations.append(t + 1)
                 if i_episode % 10 == 0:
                     performance.append(info)
+                performance_current.append(info)
                 break
         if training and i_episode % TARGET_UPDATE == 0:
             target_net.load_state_dict(policy_net.state_dict())
-        print("episode{}:done   score:{}".format(i_episode,performance[-1]))
+        print("episode{}:done   score:{}".format(i_episode,performance_current[-1]))
     torch.save(policy_net, "./policy_net")
     print('Training Complete')
     return performance
